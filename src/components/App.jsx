@@ -27,11 +27,18 @@ import VideoPlayer from './VideoPlayer.js';
 class App extends React.Component {
   constructor() {
     super();
+    this.changeVideo = this.changeVideo.bind(this);
     this.state = {
       videos: exampleVideoData,
       video: exampleVideoData[0],
     };
 
+  }
+  
+  changeVideo(video) {
+    this.setState({
+      video: video
+    });
   }
 
   render() {
@@ -47,7 +54,7 @@ class App extends React.Component {
             <div><h5><em>videoPlayer</em><VideoPlayer video={this.state.video} /></h5></div>
           </div>
           <div className="col-md-5">
-            <div><h5><em>videoList</em><VideoList videos={this.state.videos} /></h5></div>
+            <div><h5><em>videoList</em><VideoList videos={this.state.videos}  onClick={this.changeVideo} /></h5></div>
           </div>
         </div>
       </div>
