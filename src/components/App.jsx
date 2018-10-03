@@ -36,6 +36,7 @@ class App extends React.Component {
       video: {snippet: {title: null, description: null, thumbnails: {default: {url: null}} }, id: {videoId: null}},
       search: '',
       lastSearch: 0,
+      timeout: null
     };
 
   }
@@ -45,8 +46,9 @@ class App extends React.Component {
       query: this.state.search,
       maxResults: 5
     };
+    this.setState({lastSearch: Date.now() });
     this.props.searchYouTube(options, (data) => {
-      this.setState({ videos: data, lastSearch: Date.now() });
+      this.setState({ videos: data});
     });
   }
   
@@ -71,7 +73,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <Search /*value={this.state.search}*/ update={(event)=>this.updateSearchTerm(event)} submit={()=>this.submitSearchTerm()}/>
+            <Search update={(event)=>this.updateSearchTerm(event)} submit={()=>this.submitSearchTerm()}/>
           </div>
         </nav>
         <div className="row">
@@ -96,13 +98,14 @@ class App extends React.Component {
       this.setState({ videos: data, video: data[0] });
     });
   }
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevProps, prevState) {
     var waitTime = 500;
     if (this.state.search) {    
       if ((this.state.search !== prevState.search) && Date.now() - this.state.lastSearch > waitTime) {
         this.runSearch();
-      } else {
-        setTimeout( () => { this.runSearch(); }, waitTime - (Date.now() - this.state.lastSearch));
+      } else if (this.state.search !== prevState.search) {
+        clearTimeout(this.state.timeout);
+        this.state.timeout = setTimeout( () => { this.runSearch(); }, waitTime - (Date.now() - this.state.lastSearch));
       }
     }
   }
