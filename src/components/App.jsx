@@ -71,7 +71,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <Search value={this.state.value} update={(event)=>this.updateSearchTerm(event)} submit={()=>this.submitSearchTerm()}/>
+            <Search /*value={this.state.search}*/ update={(event)=>this.updateSearchTerm(event)} submit={()=>this.submitSearchTerm()}/>
           </div>
         </nav>
         <div className="row">
